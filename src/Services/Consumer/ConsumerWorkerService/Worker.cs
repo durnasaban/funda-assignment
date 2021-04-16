@@ -11,7 +11,7 @@ namespace ConsumerWorkerService
 
     public class Worker : BackgroundService
     {
-        private readonly int _periodInMinutes;
+        private readonly int _executionPeriodInMinutes;
         private readonly ILogger<Worker> _logger;
 
         public Worker(
@@ -22,7 +22,7 @@ namespace ConsumerWorkerService
 
             var options = schedulingOptions ?? throw new ArgumentNullException(nameof(schedulingOptions));
 
-            _periodInMinutes = options.Value.PeriodInMinutes;
+            _executionPeriodInMinutes = options.Value.ExecutionPeriodInMinutes;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -31,7 +31,7 @@ namespace ConsumerWorkerService
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-                await Task.Delay(TimeSpan.FromMinutes(_periodInMinutes), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(_executionPeriodInMinutes), stoppingToken);
             }
         }
     }

@@ -4,6 +4,6 @@
     {
         public const string Scheduling = "Scheduling";
 
-        public int PeriodInMinutes { get; set; }
+        public int ExecutionPeriodInMinutes { get; set; }
     }
 }
