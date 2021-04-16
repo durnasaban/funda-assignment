@@ -1,3 +1,4 @@
+using ConsumerWorkerService.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
@@ -34,6 +35,9 @@ namespace ConsumerWorkerService
                 .UseSystemd()
                 .ConfigureServices((hostContext, services) =>
                 {
+                    var configuration = hostContext.Configuration;
+
+                    services.Configure<SchedulingOptions>(configuration.GetSection(SchedulingOptions.Scheduling));
                     services.AddHostedService<Worker>();
                 })
                 .UseNLog();
