@@ -9,10 +9,8 @@ namespace CachingObjectsWorkerService.Extensions
     {
         public static IServiceCollection AddOptionsConfig(this IServiceCollection services, IConfiguration configuration) =>
             services
-                .Configure<TopLocationBasedObjectsOptions>(
-                    configuration.GetSection(TopLocationBasedObjectsOptions.TopLocationBasedObjects))
-                .Configure<TopLocationAndFeatureBasedObjectsOptions>(
-                    configuration.GetSection(TopLocationAndFeatureBasedObjectsOptions.TopLocationAndFeatureBasedObjects));
+                .Configure<TopAgentsCachingOptions>(
+                    configuration.GetSection(TopAgentsCachingOptions.TopAgentsCaching));
 
 
     }

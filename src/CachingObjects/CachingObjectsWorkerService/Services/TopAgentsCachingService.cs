@@ -2,56 +2,57 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Refit;
 
 namespace CachingObjectsWorkerService.Services
 {
+    using Models;
     using ExternalServices;
-    using Microsoft.Extensions.Logging;
     using Options;
-    using Refit;
 
-    public class TopLocationBasedObjectsService : ITopLocationBasedObjectsService
+    public class TopAgentsCachingService : ITopAgentsCachingService
     {
         private readonly IFundaApi _fundaApi;
-        private readonly ICollection<string> _objectLocations;
+        private readonly ICollection<TopAgentsCachingItem> _cachingItems;
         private readonly int _pageSize;
-        private readonly ILogger<TopLocationBasedObjectsService> _logger;
+        private readonly ILogger<TopAgentsCachingService> _logger;
 
-        public TopLocationBasedObjectsService(
+        public TopAgentsCachingService(
             IFundaApi fundaApi,
-            IOptions<TopLocationBasedObjectsOptions> topLocationBasedObjectsOptions,
-            ILogger<TopLocationBasedObjectsService> logger)
+            IOptions<TopAgentsCachingOptions> topLocationBasedObjectsOptions,
+            ILogger<TopAgentsCachingService> logger)
         {
             _fundaApi = fundaApi ?? throw new ArgumentNullException(nameof(fundaApi));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             var options = topLocationBasedObjectsOptions ?? throw new ArgumentNullException(nameof(topLocationBasedObjectsOptions));
 
-            _objectLocations = options.Value.Locations != null && options.Value.Locations.Count != 0 ?
-                                options.Value.Locations :
-                                throw new ArgumentNullException(nameof(options.Value.Locations));
-
-            _pageSize = options.Value.PageSize != default ?
-                            options.Value.PageSize :
-                            throw new ArgumentException(nameof(options.Value.PageSize));
+            _cachingItems = options.Value.Items;
+            _pageSize = options.Value.PageSize;
         }
 
         public async Task ProsessCachingObjectsAsync()
         {
-            foreach (var location in _objectLocations)
+            foreach (var cachingItem in _cachingItems)
             {
-                await ProcessCachingObjectsByLocationAsync(location);
+                await ProcessCachingObjectsByLocationAsync(cachingItem);
             }
         }
 
-        private async Task ProcessCachingObjectsByLocationAsync(string location)
+        private async Task ProcessCachingObjectsByLocationAsync(TopAgentsCachingItem cachingItem)
         {
             var currentPage = 1;
             var maxPage = 1;
 
             while (currentPage <= maxPage)
             {
-                var response = await GetObjectsFromApi(location, currentPage);
+                var response = await GetObjectsFromApi(cachingItem.SearchQuery, currentPage);
+
+                // implement mongo
+                // Send responses to the mongo
+                // implement redis
+                // Cache redis reports to redis
 
                 if (maxPage == 1)
                 {

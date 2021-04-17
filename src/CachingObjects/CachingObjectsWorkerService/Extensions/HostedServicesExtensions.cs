@@ -8,7 +8,6 @@ namespace CachingObjectsWorkerService.Extensions
     {
         public static IServiceCollection AddHostedServices(this IServiceCollection services) =>
             services
-                .AddHostedService<TopLocationBasedObjectsWorker>()
-                .AddHostedService<TopLocationAndFeatureBasedObjectsWorker>();
+                .AddHostedService<TopAgentsWorker>();
     }
 }

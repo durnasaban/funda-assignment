@@ -2,7 +2,7 @@
 
 namespace CachingObjectsWorkerService.Services
 {
-    public interface ITopLocationBasedObjectsService
+    public interface ITopAgentsCachingService
     {
         Task ProsessCachingObjectsAsync();
     }

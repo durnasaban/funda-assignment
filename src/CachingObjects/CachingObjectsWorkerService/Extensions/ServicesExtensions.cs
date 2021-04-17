@@ -8,6 +8,6 @@ namespace CachingObjectsWorkerService.Extensions
     {
         public static IServiceCollection AddServices(this IServiceCollection services) =>
             services
-                .AddTransient<ITopLocationBasedObjectsService, TopLocationBasedObjectsService>();        
+                .AddTransient<ITopAgentsCachingService, TopAgentsCachingService>();        
     }
 }

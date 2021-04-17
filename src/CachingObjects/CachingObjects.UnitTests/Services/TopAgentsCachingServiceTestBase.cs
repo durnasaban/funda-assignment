@@ -4,13 +4,13 @@ namespace CachingObjects.UnitTests.Services
 {
     using CachingObjectsWorkerService.Options;
 
-    public class TopLocationBasedObjectsServiceTestBase
+    public class TopAgentsCachingServiceTestBase
     {
-        protected IOptions<TopLocationBasedObjectsOptions> GetTopLocationBasedObjectOptions(
+        protected IOptions<TopAgentsCachingOptions> GetTopLocationBasedObjectOptions(
             int pageSize = 1, 
             params string[] locations)
         {
-            var options = new TopLocationBasedObjectsOptions
+            var options = new TopAgentsCachingOptions
             {
                 Locations = locations,
                 PageSize = pageSize

@@ -10,16 +10,16 @@ namespace CachingObjectsWorkerService.BackgroundServices
     using Services;
     using Options;
 
-    public class TopLocationBasedObjectsWorker : BackgroundService
+    public class TopAgentsWorker : BackgroundService
     {
-        private readonly ITopLocationBasedObjectsService _service;
+        private readonly ITopAgentsCachingService _service;
         private readonly int _executionPeriodInMinutes;
-        private readonly ILogger<TopLocationBasedObjectsWorker> _logger;
+        private readonly ILogger<TopAgentsWorker> _logger;
 
-        public TopLocationBasedObjectsWorker(
-            ITopLocationBasedObjectsService service,
-            IOptions<TopLocationBasedObjectsOptions> objectsOptions,
-            ILogger<TopLocationBasedObjectsWorker> logger)
+        public TopAgentsWorker(
+            ITopAgentsCachingService service,
+            IOptions<TopAgentsCachingOptions> objectsOptions,
+            ILogger<TopAgentsWorker> logger)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
             _logger = logger;

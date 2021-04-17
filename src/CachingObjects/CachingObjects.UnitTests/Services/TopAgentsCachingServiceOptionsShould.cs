@@ -13,15 +13,15 @@ namespace CachingObjects.UnitTests.Services
     using CachingObjectsWorkerService.Options;
     using CachingObjectsWorkerService.Services;
 
-    public class TopLocationBasedObjectsServiceLocationsShould : TopLocationBasedObjectsServiceTestBase
+    public class TopLocationBasedObjectsServiceLocationsShould : TopAgentsCachingServiceTestBase
     {
         private readonly Mock<IFundaApi> _fundaApiMock;
-        private readonly Mock<ILogger<TopLocationBasedObjectsService>> _loggerMock;
+        private readonly Mock<ILogger<TopAgentsCachingService>> _loggerMock;
 
         public TopLocationBasedObjectsServiceLocationsShould()
         {
             _fundaApiMock = new Mock<IFundaApi>();
-            _loggerMock = new Mock<ILogger<TopLocationBasedObjectsService>>();
+            _loggerMock = new Mock<ILogger<TopAgentsCachingService>>();
 
             SetupFundaApiGetLocationBasedObjects();
         }
@@ -30,10 +30,10 @@ namespace CachingObjects.UnitTests.Services
         public void ThrowArgumentNullExceptionGivenEmptyTopLocationBasedObjectsOptions()
         {
             // arrange
-            IOptions<TopLocationBasedObjectsOptions> topLocationBasedObjectsOptions = null;
+            IOptions<TopAgentsCachingOptions> topLocationBasedObjectsOptions = null;
 
             // act
-            Func<TopLocationBasedObjectsService> serviceFunc = () => GetServiceInstance(topLocationBasedObjectsOptions);
+            Func<TopAgentsCachingService> serviceFunc = () => GetServiceInstance(topLocationBasedObjectsOptions);
 
             // assert
             serviceFunc.Should().Throw<ArgumentNullException>();
@@ -43,8 +43,8 @@ namespace CachingObjects.UnitTests.Services
         public void ThrowArgumentNullExceptionGivenNullOrEmptyLocations()
         {
             // arrange & act
-            Func<TopLocationBasedObjectsService> serviceFuncWithNullLocations = () => GetServiceInstance(GetTopLocationBasedObjectOptions());
-            Func<TopLocationBasedObjectsService> serviceFuncWithEmptyLocations = () => GetServiceInstance(GetTopLocationBasedObjectOptions(1, Array.Empty<string>()));
+            Func<TopAgentsCachingService> serviceFuncWithNullLocations = () => GetServiceInstance(GetTopLocationBasedObjectOptions());
+            Func<TopAgentsCachingService> serviceFuncWithEmptyLocations = () => GetServiceInstance(GetTopLocationBasedObjectOptions(1, Array.Empty<string>()));
 
             // assert
             serviceFuncWithNullLocations.Should().Throw<ArgumentNullException>();
@@ -84,7 +84,7 @@ namespace CachingObjects.UnitTests.Services
             var options = GetTopLocationBasedObjectOptions(0, "location");
 
             // act
-            Func<TopLocationBasedObjectsService> service = () => GetServiceInstance(options);
+            Func<TopAgentsCachingService> service = () => GetServiceInstance(options);
 
             // assert
             service.Should().Throw<ArgumentException>();
@@ -119,7 +119,7 @@ namespace CachingObjects.UnitTests.Services
                 .ReturnsAsync(response);
         }
 
-        private TopLocationBasedObjectsService GetServiceInstance(IOptions<TopLocationBasedObjectsOptions> options) =>
-           new TopLocationBasedObjectsService(_fundaApiMock.Object, options, _loggerMock.Object);
+        private TopAgentsCachingService GetServiceInstance(IOptions<TopAgentsCachingOptions> options) =>
+           new TopAgentsCachingService(_fundaApiMock.Object, options, _loggerMock.Object);
     }
 }

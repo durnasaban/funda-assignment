@@ -13,15 +13,15 @@ namespace CachingObjects.UnitTests.Services
     using CachingObjectsWorkerService.Options;
     using CachingObjectsWorkerService.Services;
 
-    public class TopLocationBasedObjectsServiceFundaApiShould : TopLocationBasedObjectsServiceTestBase
+    public class TopAgentsCachingServiceFundaApiShould : TopAgentsCachingServiceTestBase
     {
         private readonly Mock<IFundaApi> _fundaApiMock;
-        private readonly Mock<ILogger<TopLocationBasedObjectsService>> _loggerMock;
+        private readonly Mock<ILogger<TopAgentsCachingService>> _loggerMock;
 
-        public TopLocationBasedObjectsServiceFundaApiShould()
+        public TopAgentsCachingServiceFundaApiShould()
         {
             _fundaApiMock = new Mock<IFundaApi>();
-            _loggerMock = new Mock<ILogger<TopLocationBasedObjectsService>>();
+            _loggerMock = new Mock<ILogger<TopAgentsCachingService>>();
         }
 
         [Fact]
@@ -29,11 +29,30 @@ namespace CachingObjects.UnitTests.Services
         {
             // arrange            
             var options = GetTopLocationBasedObjectOptions(1, "location");
-            TopLocationBasedObjectsService testing = GetServiceInstance(options);
+            TopAgentsCachingService testing = GetServiceInstance(options);
 
             _fundaApiMock
                 .Setup(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(null);
+
+            // act
+            Func<Task> func = async () => { await testing.ProsessCachingObjectsAsync(); };
+
+            // assert
+            func.Should().Throw<Exception>();
+        }
+
+
+        [Fact]
+        public void ThrowExceptionWhenApiCallThrowsException()
+        {
+            // arrange            
+            var options = GetTopLocationBasedObjectOptions(1, "location");
+            TopAgentsCachingService testing = GetServiceInstance(options);
+
+            _fundaApiMock
+                .Setup(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Throws<Exception>();
 
             // act
             Func<Task> func = async () => { await testing.ProsessCachingObjectsAsync(); };
@@ -68,7 +87,7 @@ namespace CachingObjects.UnitTests.Services
                 .Verify(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), pageSize), Times.Exactly(totalPage));
         }
 
-        private TopLocationBasedObjectsService GetServiceInstance(IOptions<TopLocationBasedObjectsOptions> options) =>
-           new TopLocationBasedObjectsService(_fundaApiMock.Object, options, _loggerMock.Object);
+        private TopAgentsCachingService GetServiceInstance(IOptions<TopAgentsCachingOptions> options) =>
+           new TopAgentsCachingService(_fundaApiMock.Object, options, _loggerMock.Object);
     }
 }
