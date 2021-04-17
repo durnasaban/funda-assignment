@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Consumer", "Consumer", "{39
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerWorkerService", "src\Services\Consumer\ConsumerWorkerService\ConsumerWorkerService.csproj", "{9008DE1B-402D-4B91-846B-AAD3351CD69B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerWorkerService.Tests", "test\Services\Consumer\ConsumerWorkerService.Tests\ConsumerWorkerService.Tests.csproj", "{87F93CBE-538C-43C7-88FB-344A246E2995}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,10 +19,6 @@ Global
 		{9008DE1B-402D-4B91-846B-AAD3351CD69B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9008DE1B-402D-4B91-846B-AAD3351CD69B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9008DE1B-402D-4B91-846B-AAD3351CD69B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87F93CBE-538C-43C7-88FB-344A246E2995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87F93CBE-538C-43C7-88FB-344A246E2995}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87F93CBE-538C-43C7-88FB-344A246E2995}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87F93CBE-538C-43C7-88FB-344A246E2995}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,7 +26,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3998E198-CDB3-4F6C-BAD3-1BACE4291B4E} = {09DF6F8A-538B-43A8-B470-4B02A836CC4C}
 		{9008DE1B-402D-4B91-846B-AAD3351CD69B} = {3998E198-CDB3-4F6C-BAD3-1BACE4291B4E}
-		{87F93CBE-538C-43C7-88FB-344A246E2995} = {3998E198-CDB3-4F6C-BAD3-1BACE4291B4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC13AA49-BF31-45C5-AD80-C15E119A09B2}
