@@ -12,6 +12,7 @@ namespace CachingObjectsWorkerService.Services
     {
         private readonly IFundaApi _fundaApi;
         private readonly ICollection<string> _objectLocations;
+        private readonly int _pageSize;
 
         public TopLocationBasedObjectsService(
             IFundaApi fundaApi,
@@ -25,13 +26,17 @@ namespace CachingObjectsWorkerService.Services
                                 options.Value.Locations :
                                 throw new ArgumentNullException(nameof(options.Value.Locations));
 
+            _pageSize = options.Value.PageSize != default ?
+                            options.Value.PageSize :
+                            throw new ArgumentException(nameof(options.Value.PageSize));
+
         }
 
         public async Task ProsessCachingObjectsAsync()
         {
             foreach (var location in _objectLocations)
             {
-                var response = await _fundaApi.GetObjects(location, 1, 50);
+                var response = await _fundaApi.GetObjects(location, 1, _pageSize);
             }
         }
     }

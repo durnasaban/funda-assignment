@@ -7,5 +7,7 @@ namespace CachingObjectsWorkerService.Options
         public const string TopLocationBasedObjects = "TopLocationBasedObjects";
 
         public ICollection<string> Locations { get; set; }
+
+        public int PageSize { get; set; }
     }
 }
