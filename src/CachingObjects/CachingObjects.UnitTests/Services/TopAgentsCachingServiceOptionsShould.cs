@@ -1,24 +1,25 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 using Xunit;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 
 namespace CachingObjects.UnitTests.Services
 {
     using CachingObjectsWorkerService.ExternalServices;
+    using CachingObjectsWorkerService.Models;
     using CachingObjectsWorkerService.Options;
     using CachingObjectsWorkerService.Services;
 
-    public class TopLocationBasedObjectsServiceLocationsShould : TopAgentsCachingServiceTestBase
+    public class TopAgentsCachingServiceOptionsShould : TopAgentsCachingServiceTestBase
     {
         private readonly Mock<IFundaApi> _fundaApiMock;
         private readonly Mock<ILogger<TopAgentsCachingService>> _loggerMock;
 
-        public TopLocationBasedObjectsServiceLocationsShould()
+        public TopAgentsCachingServiceOptionsShould()
         {
             _fundaApiMock = new Mock<IFundaApi>();
             _loggerMock = new Mock<ILogger<TopAgentsCachingService>>();
@@ -40,25 +41,19 @@ namespace CachingObjects.UnitTests.Services
         }
 
         [Fact]
-        public void ThrowArgumentNullExceptionGivenNullOrEmptyLocations()
-        {
-            // arrange & act
-            Func<TopAgentsCachingService> serviceFuncWithNullLocations = () => GetServiceInstance(GetTopLocationBasedObjectOptions());
-            Func<TopAgentsCachingService> serviceFuncWithEmptyLocations = () => GetServiceInstance(GetTopLocationBasedObjectOptions(1, Array.Empty<string>()));
-
-            // assert
-            serviceFuncWithNullLocations.Should().Throw<ArgumentNullException>();
-            serviceFuncWithEmptyLocations.Should().Throw<ArgumentNullException>();
-        }
-
-        [Theory]
-        [InlineData("location1")]
-        [InlineData("location1", "location2")]
-        [InlineData("location1", "location2", "location3")]
-        public async Task ShouldConsumeFundaApiAtLeastOnceGivenLocations(params string[] locations)
+        public async Task ShouldConsumeFundaApiOnceGivenJustOneCachingItem()
         {
             // arrange
-            var options = GetTopLocationBasedObjectOptions(1, locations);
+            var cachingItems = new[]
+            {
+                new TopAgentsCachingItem
+                {
+                     Key = "key1",
+                     SearchQuery = "searchQuery1",
+                }
+            };
+
+            var options = GetTopAgentsCachingOptions(1, cachingItems);
 
             var testing = GetServiceInstance(options);
 
@@ -67,27 +62,53 @@ namespace CachingObjects.UnitTests.Services
             await testing.ProsessCachingObjectsAsync();
 
             // asset
-            foreach (var location in locations)
+            _fundaApiMock
+                .Verify(
+                api => api.GetObjects(cachingItems[0].SearchQuery, It.IsAny<int>(), It.IsAny<int>()),
+                Times.AtLeastOnce);
+        }
+
+
+        [Fact]
+        public async Task ShouldConsumeFundaApiAtLeastOnceGivenCachingItems()
+        {
+            // arrange
+            var cachingItems = new[]
+            {
+                new TopAgentsCachingItem
+                {
+                     Key = "key1",
+                     SearchQuery = "searchQuery1",
+                },
+                new TopAgentsCachingItem
+                {
+                     Key = "key2",
+                     SearchQuery = "searchQuery2",
+                },
+                new TopAgentsCachingItem
+                {
+                     Key = "key3",
+                     SearchQuery = "searchQuery3",
+                }
+            };
+
+            var options = GetTopAgentsCachingOptions(1, cachingItems);
+
+            var testing = GetServiceInstance(options);
+
+            // act
+
+            await testing.ProsessCachingObjectsAsync();
+
+            // asset
+            foreach (var item in cachingItems)
             {
                 _fundaApiMock
                     .Verify(
-                    api => api.GetObjects(location, It.IsAny<int>(), It.IsAny<int>()),
-                    Times.AtLeastOnce,
-                    $"Operation with \"{location}\" can not be verified");
+                        api => api.GetObjects(item.SearchQuery, It.IsAny<int>(), It.IsAny<int>()),
+                        Times.AtLeastOnce,
+                        $"Operation with \"{item.Key}\" can not be verified");
             }
-        }
-
-        [Fact]
-        public void ThrowArgumentNullExceptionGivenDefaultPageSize()
-        {
-            // arrange
-            var options = GetTopLocationBasedObjectOptions(0, "location");
-
-            // act
-            Func<TopAgentsCachingService> service = () => GetServiceInstance(options);
-
-            // assert
-            service.Should().Throw<ArgumentException>();
         }
 
         [Fact]
@@ -95,7 +116,7 @@ namespace CachingObjects.UnitTests.Services
         {
             // arrange
             var pageSize = 1;
-            var options = GetTopLocationBasedObjectOptions(pageSize, "location");
+            var options = GetDefaultTopAgentsCachingOptions(pageSize);
 
             var testing = GetServiceInstance(options);
 

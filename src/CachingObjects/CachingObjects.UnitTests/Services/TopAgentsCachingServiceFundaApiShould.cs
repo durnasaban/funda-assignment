@@ -1,11 +1,11 @@
-﻿using Moq;
-using System.Threading.Tasks;
-using Xunit;
-using FluentAssertions;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace CachingObjects.UnitTests.Services
 {
@@ -27,9 +27,8 @@ namespace CachingObjects.UnitTests.Services
         [Fact]
         public void ThrowExceptionWhenApiReturnsNull()
         {
-            // arrange            
-            var options = GetTopLocationBasedObjectOptions(1, "location");
-            TopAgentsCachingService testing = GetServiceInstance(options);
+            // arrange                        
+            TopAgentsCachingService testing = GetServiceInstance(GetDefaultTopAgentsCachingOptions());
 
             _fundaApiMock
                 .Setup(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
@@ -47,8 +46,7 @@ namespace CachingObjects.UnitTests.Services
         public void ThrowExceptionWhenApiCallThrowsException()
         {
             // arrange            
-            var options = GetTopLocationBasedObjectOptions(1, "location");
-            TopAgentsCachingService testing = GetServiceInstance(options);
+            TopAgentsCachingService testing = GetServiceInstance(GetDefaultTopAgentsCachingOptions());
 
             _fundaApiMock
                 .Setup(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
@@ -71,7 +69,7 @@ namespace CachingObjects.UnitTests.Services
             var pageSize = 1;
             var response = JObject.Parse(@"{'Paging': { 'AantalPaginas' : " + totalPage + " }}");
 
-            var options = GetTopLocationBasedObjectOptions(pageSize, "location");
+            var options = GetDefaultTopAgentsCachingOptions(pageSize);
             var testing = GetServiceInstance(options);
 
             _fundaApiMock

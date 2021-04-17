@@ -1,14 +1,14 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Refit;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Refit;
 
 namespace CachingObjectsWorkerService.Services
 {
-    using Models;
     using ExternalServices;
+    using Models;
     using Options;
 
     public class TopAgentsCachingService : ITopAgentsCachingService
@@ -28,7 +28,7 @@ namespace CachingObjectsWorkerService.Services
 
             var options = topLocationBasedObjectsOptions ?? throw new ArgumentNullException(nameof(topLocationBasedObjectsOptions));
 
-            _cachingItems = options.Value.Items;
+            _cachingItems = options.Value.CachingItems;
             _pageSize = options.Value.PageSize;
         }
 

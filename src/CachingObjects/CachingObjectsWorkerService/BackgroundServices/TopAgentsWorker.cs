@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace CachingObjectsWorkerService.BackgroundServices
 {
-    using Services;
     using Options;
+    using Services;
 
     public class TopAgentsWorker : BackgroundService
     {
@@ -44,16 +44,16 @@ namespace CachingObjectsWorkerService.BackgroundServices
         {
             try
             {
-                _logger.LogInformation("Top Location Based Objects Worker started running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Top Agents Worker started running at: {time}", DateTimeOffset.Now);
 
                 await _service.ProsessCachingObjectsAsync();
 
-                _logger.LogInformation("Top Location Based Objects Worker finished successfully at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Top Agents Worker finished successfully at: {time}", DateTimeOffset.Now);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An exception occured while executing Top Location Based Objects Worker");
-                _logger.LogWarning("Top Location Based Objects Worker finished with exception at: {time}", DateTimeOffset.Now);
+                _logger.LogError(ex, "An exception occured while executing Top Agents Worker");
+                _logger.LogWarning("Top Agents Worker finished with exception at: {time}", DateTimeOffset.Now);
             }
         }
     }

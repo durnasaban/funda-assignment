@@ -12,6 +12,6 @@ namespace CachingObjectsWorkerService.Options
 
         public int PageSize { get; set; }
 
-        public ICollection<TopAgentsCachingItem> Items { get; set; }
+        public ICollection<TopAgentsCachingItem> CachingItems { get; set; }
     }
 }

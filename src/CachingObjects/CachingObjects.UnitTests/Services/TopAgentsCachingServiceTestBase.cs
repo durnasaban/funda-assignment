@@ -2,21 +2,38 @@
 
 namespace CachingObjects.UnitTests.Services
 {
+    using CachingObjectsWorkerService.Models;
     using CachingObjectsWorkerService.Options;
 
     public class TopAgentsCachingServiceTestBase
     {
-        protected IOptions<TopAgentsCachingOptions> GetTopLocationBasedObjectOptions(
-            int pageSize = 1, 
-            params string[] locations)
+        protected IOptions<TopAgentsCachingOptions> GetTopAgentsCachingOptions(
+            int pageSize,
+            params TopAgentsCachingItem[] cachingItems)
         {
             var options = new TopAgentsCachingOptions
             {
-                Locations = locations,
+                CachingItems = cachingItems,
                 PageSize = pageSize
             };
 
             return Options.Create(options);
         }
+
+        protected IOptions<TopAgentsCachingOptions> GetDefaultTopAgentsCachingOptions(int pageSize = 1)
+        {
+            var cachingItems = new[]
+            {
+                new TopAgentsCachingItem
+                {
+                     Key = "key",
+                      SearchQuery = "searchKey",
+                       TopAgentCount = 10
+                }
+            };
+
+            return GetTopAgentsCachingOptions(pageSize, cachingItems);
+        }
+
     }
 }

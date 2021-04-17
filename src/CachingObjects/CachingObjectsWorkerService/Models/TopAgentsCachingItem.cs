@@ -5,5 +5,7 @@
         public string Key { get; set; }
 
         public string SearchQuery { get; set; }
+
+        public int TopAgentCount { get; set; }
     }
 }
