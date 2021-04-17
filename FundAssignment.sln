@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CachingObjects", "CachingOb
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CachingObjectsWorkerService", "src\CachingObjects\CachingObjectsWorkerService\CachingObjectsWorkerService.csproj", "{39893DD0-275F-4C2A-A87C-06C63CEECD62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CachingObjects.UnitTests", "src\CachingObjects\CachingObjects.UnitTests\CachingObjects.UnitTests.csproj", "{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{39893DD0-275F-4C2A-A87C-06C63CEECD62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39893DD0-275F-4C2A-A87C-06C63CEECD62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39893DD0-275F-4C2A-A87C-06C63CEECD62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -26,6 +32,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3998E198-CDB3-4F6C-BAD3-1BACE4291B4E} = {09DF6F8A-538B-43A8-B470-4B02A836CC4C}
 		{39893DD0-275F-4C2A-A87C-06C63CEECD62} = {3998E198-CDB3-4F6C-BAD3-1BACE4291B4E}
+		{BC3491F4-57C4-403B-B6BC-84E3CFB527FF} = {3998E198-CDB3-4F6C-BAD3-1BACE4291B4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC13AA49-BF31-45C5-AD80-C15E119A09B2}
