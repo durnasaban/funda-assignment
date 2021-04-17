@@ -1,9 +1,7 @@
 ﻿namespace ConsumerWorkerService.Options
 {
-    public class SchedulingOptions
+    public class ObjectsOptionsBase
     {
-        public const string Scheduling = "Scheduling";
-
         public int ExecutionPeriodInMinutes { get; set; }
     }
 }

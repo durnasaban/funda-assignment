@@ -1,4 +1,3 @@
-using ConsumerWorkerService.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
@@ -6,6 +5,9 @@ using System;
 
 namespace ConsumerWorkerService
 {
+    using BackgroundServices;
+    using Options;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -37,8 +39,15 @@ namespace ConsumerWorkerService
                 {
                     var configuration = hostContext.Configuration;
 
-                    services.Configure<SchedulingOptions>(configuration.GetSection(SchedulingOptions.Scheduling));
-                    services.AddHostedService<Worker>();
+                    services
+                        .Configure<CachingTopLocationBasedObjectsOptions>(
+                                configuration
+                                    .GetSection(CachingTopLocationBasedObjectsOptions.CachingTopLocationBasedObjects))
+                        .Configure<CachingTopLocationAndFeatureBasedObjectsOptions>(
+                                configuration
+                                    .GetSection(CachingTopLocationAndFeatureBasedObjectsOptions.CachingTopLocationAndFeatureBasedObjects))
+                        .AddHostedService<CachingTopLocationBasedObjectsWorker>()
+                        .AddHostedService<CachingTopLocationAndFeatureBasedObjectsWorker>();
                 })
                 .UseNLog();
     }

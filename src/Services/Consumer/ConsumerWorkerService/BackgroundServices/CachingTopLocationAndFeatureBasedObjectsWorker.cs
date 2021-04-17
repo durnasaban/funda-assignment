@@ -1,26 +1,26 @@
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ConsumerWorkerService
+namespace ConsumerWorkerService.BackgroundServices
 {
     using Options;
 
-    public class Worker : BackgroundService
+    public class CachingTopLocationAndFeatureBasedObjectsWorker : BackgroundService
     {
         private readonly int _executionPeriodInMinutes;
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<CachingTopLocationAndFeatureBasedObjectsWorker> _logger;
 
-        public Worker(
-            IOptions<SchedulingOptions> schedulingOptions,
-            ILogger<Worker> logger)
+        public CachingTopLocationAndFeatureBasedObjectsWorker(
+            IOptions<CachingTopLocationBasedObjectsOptions> objectsOptions,
+            ILogger<CachingTopLocationAndFeatureBasedObjectsWorker> logger)
         {
             _logger = logger;
 
-            var options = schedulingOptions ?? throw new ArgumentNullException(nameof(schedulingOptions));
+            var options = objectsOptions ?? throw new ArgumentNullException(nameof(objectsOptions));
 
             _executionPeriodInMinutes = options.Value.ExecutionPeriodInMinutes;
         }
