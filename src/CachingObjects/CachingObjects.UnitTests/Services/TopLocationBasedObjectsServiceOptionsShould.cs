@@ -1,23 +1,29 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Options;
+using Moq;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace CachingObjects.UnitTests.Services
 {
     using CachingObjectsWorkerService.ExternalServices;
     using CachingObjectsWorkerService.Options;
     using CachingObjectsWorkerService.Services;
-    using Moq;
 
-    public class TopLocationBasedObjectsServiceLocationsShould
+    public class TopLocationBasedObjectsServiceLocationsShould : TopLocationBasedObjectsServiceTestBase
     {
         private readonly Mock<IFundaApi> _fundaApiMock;
+        private readonly Mock<ILogger<TopLocationBasedObjectsService>> _loggerMock;
 
         public TopLocationBasedObjectsServiceLocationsShould()
         {
             _fundaApiMock = new Mock<IFundaApi>();
+            _loggerMock = new Mock<ILogger<TopLocationBasedObjectsService>>();
+
+            SetupFundaApiGetLocationBasedObjects();
         }
 
         [Fact]
@@ -27,7 +33,7 @@ namespace CachingObjects.UnitTests.Services
             IOptions<TopLocationBasedObjectsOptions> topLocationBasedObjectsOptions = null;
 
             // act
-            Func<TopLocationBasedObjectsService> serviceFunc = () => new TopLocationBasedObjectsService(_fundaApiMock.Object, topLocationBasedObjectsOptions);
+            Func<TopLocationBasedObjectsService> serviceFunc = () => GetServiceInstance(topLocationBasedObjectsOptions);
 
             // assert
             serviceFunc.Should().Throw<ArgumentNullException>();
@@ -37,11 +43,8 @@ namespace CachingObjects.UnitTests.Services
         public void ThrowArgumentNullExceptionGivenNullOrEmptyLocations()
         {
             // arrange & act
-            Func<TopLocationBasedObjectsService> serviceFuncWithNullLocations = () =>
-                new TopLocationBasedObjectsService(_fundaApiMock.Object, GetTopLocationBasedObjectOptions());
-
-            Func<TopLocationBasedObjectsService> serviceFuncWithEmptyLocations = () =>
-                new TopLocationBasedObjectsService(_fundaApiMock.Object, GetTopLocationBasedObjectOptions(1, Array.Empty<string>()));
+            Func<TopLocationBasedObjectsService> serviceFuncWithNullLocations = () => GetServiceInstance(GetTopLocationBasedObjectOptions());
+            Func<TopLocationBasedObjectsService> serviceFuncWithEmptyLocations = () => GetServiceInstance(GetTopLocationBasedObjectOptions(1, Array.Empty<string>()));
 
             // assert
             serviceFuncWithNullLocations.Should().Throw<ArgumentNullException>();
@@ -57,7 +60,7 @@ namespace CachingObjects.UnitTests.Services
             // arrange
             var options = GetTopLocationBasedObjectOptions(1, locations);
 
-            var testing = new TopLocationBasedObjectsService(_fundaApiMock.Object, options);
+            var testing = GetServiceInstance(options);
 
             // act
 
@@ -81,7 +84,7 @@ namespace CachingObjects.UnitTests.Services
             var options = GetTopLocationBasedObjectOptions(0, "location");
 
             // act
-            Func<TopLocationBasedObjectsService> service = () => new TopLocationBasedObjectsService(_fundaApiMock.Object, options);
+            Func<TopLocationBasedObjectsService> service = () => GetServiceInstance(options);
 
             // assert
             service.Should().Throw<ArgumentException>();
@@ -94,7 +97,7 @@ namespace CachingObjects.UnitTests.Services
             var pageSize = 1;
             var options = GetTopLocationBasedObjectOptions(pageSize, "location");
 
-            var testing = new TopLocationBasedObjectsService(_fundaApiMock.Object, options);
+            var testing = GetServiceInstance(options);
 
             // act
 
@@ -105,18 +108,18 @@ namespace CachingObjects.UnitTests.Services
                 .Verify(
                 api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), pageSize),
                 Times.AtLeastOnce);
-            
         }
 
-        private static IOptions<TopLocationBasedObjectsOptions> GetTopLocationBasedObjectOptions(int pageSize = 1, params string[] locations)
+        private void SetupFundaApiGetLocationBasedObjects()
         {
-            var options = new TopLocationBasedObjectsOptions
-            {
-                Locations = locations,
-                PageSize = pageSize
-            };
+            var response = JObject.Parse(@"{'Paging': { 'AantalPaginas' : 1 }}");
 
-            return Options.Create(options);
+            _fundaApiMock
+                .Setup(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(response);
         }
+
+        private TopLocationBasedObjectsService GetServiceInstance(IOptions<TopLocationBasedObjectsOptions> options) =>
+           new TopLocationBasedObjectsService(_fundaApiMock.Object, options, _loggerMock.Object);
     }
 }
