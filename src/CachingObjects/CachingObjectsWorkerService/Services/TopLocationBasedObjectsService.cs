@@ -31,7 +31,7 @@ namespace CachingObjectsWorkerService.Services
         {
             foreach (var location in _objectLocations)
             {
-                var response = await _fundaApi.GetObjects(location);
+                var response = await _fundaApi.GetObjects(location, 1, 50);
             }
         }
     }

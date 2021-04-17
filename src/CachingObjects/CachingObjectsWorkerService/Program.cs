@@ -1,12 +1,11 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
 using System;
 
 namespace CachingObjectsWorkerService
 {
-    using BackgroundServices;
-    using Options;
+    using Extensions;
+    using Microsoft.Extensions.Configuration;
 
     public class Program
     {
@@ -33,6 +32,13 @@ namespace CachingObjectsWorkerService
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostContext, builder) =>
+                {
+                    if (hostContext.HostingEnvironment.IsDevelopment())
+                    {
+                        builder.AddUserSecrets<Program>();
+                    }
+                })
                 .UseWindowsService()
                 .UseSystemd()
                 .ConfigureServices((hostContext, services) =>
@@ -40,14 +46,10 @@ namespace CachingObjectsWorkerService
                     var configuration = hostContext.Configuration;
 
                     services
-                        .Configure<TopLocationBasedObjectsOptions>(
-                                configuration
-                                    .GetSection(TopLocationBasedObjectsOptions.TopLocationBasedObjects))
-                        .Configure<TopLocationAndFeatureBasedObjectsOptions>(
-                                configuration
-                                    .GetSection(TopLocationAndFeatureBasedObjectsOptions.TopLocationAndFeatureBasedObjects))
-                        .AddHostedService<TopLocationBasedObjectsWorker>()
-                        .AddHostedService<TopLocationAndFeatureBasedObjectsWorker>();
+                        .AddOptionsConfig(configuration)
+                        .AddHostedServices()
+                        .AddRefitConfig(configuration)
+                        .AddServices();
                 })
                 .UseNLog();
     }

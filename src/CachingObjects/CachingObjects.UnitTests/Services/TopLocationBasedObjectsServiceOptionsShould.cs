@@ -63,7 +63,7 @@ namespace CachingObjects.UnitTests.Services
             await testing.ProsessCachingObjectsAsync();
 
             // asset
-            _fundaApiMock.Verify(api => api.GetObjects(location), Times.AtLeastOnce);
+            _fundaApiMock.Verify(api => api.GetObjects(location, It.IsAny<int>(), It.IsAny<int>()), Times.AtLeastOnce);
         }
 
         [Fact]
@@ -82,8 +82,8 @@ namespace CachingObjects.UnitTests.Services
             await testing.ProsessCachingObjectsAsync();
 
             // asset
-            _fundaApiMock.Verify(api => api.GetObjects(location1), Times.AtLeastOnce);
-            _fundaApiMock.Verify(api => api.GetObjects(location2), Times.AtLeastOnce);
+            _fundaApiMock.Verify(api => api.GetObjects(location1, It.IsAny<int>(), It.IsAny<int>()), Times.AtLeastOnce);
+            _fundaApiMock.Verify(api => api.GetObjects(location2, It.IsAny<int>(), It.IsAny<int>()), Times.AtLeastOnce);
         }
 
         private static IOptions<TopLocationBasedObjectsOptions> GetTopLocationBasedObjectOptions(params string[] locations)
