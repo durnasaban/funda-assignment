@@ -1,4 +1,4 @@
-﻿namespace ConsumerWorkerService.Options
+﻿namespace CachingObjectsWorkerService.Options
 {
     public class ObjectsOptionsBase
     {

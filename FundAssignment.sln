@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{09DF6F8A-538B-43A8-B470-4B02A836CC4C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Consumer", "Consumer", "{3998E198-CDB3-4F6C-BAD3-1BACE4291B4E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CachingObjects", "CachingObjects", "{3998E198-CDB3-4F6C-BAD3-1BACE4291B4E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerWorkerService", "src\Services\Consumer\ConsumerWorkerService\ConsumerWorkerService.csproj", "{9008DE1B-402D-4B91-846B-AAD3351CD69B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CachingObjectsWorkerService", "src\Services\Consumer\ConsumerWorkerService\CachingObjectsWorkerService.csproj", "{9008DE1B-402D-4B91-846B-AAD3351CD69B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

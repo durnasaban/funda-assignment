@@ -5,18 +5,18 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ConsumerWorkerService.BackgroundServices
+namespace CachingObjectsWorkerService.BackgroundServices
 {
     using Options;
 
-    public class CachingTopLocationBasedObjectsWorker : BackgroundService
+    public class TopLocationBasedObjectsWorker : BackgroundService
     {
         private readonly int _executionPeriodInMinutes;
-        private readonly ILogger<CachingTopLocationBasedObjectsWorker> _logger;
+        private readonly ILogger<TopLocationBasedObjectsWorker> _logger;
 
-        public CachingTopLocationBasedObjectsWorker(
-            IOptions<CachingTopLocationBasedObjectsOptions> objectsOptions,
-            ILogger<CachingTopLocationBasedObjectsWorker> logger)
+        public TopLocationBasedObjectsWorker(
+            IOptions<TopLocationBasedObjectsOptions> objectsOptions,
+            ILogger<TopLocationBasedObjectsWorker> logger)
         {
             _logger = logger;
 

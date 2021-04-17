@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 using NLog.Web;
 using System;
 
-namespace ConsumerWorkerService
+namespace CachingObjectsWorkerService
 {
     using BackgroundServices;
     using Options;
@@ -40,14 +40,14 @@ namespace ConsumerWorkerService
                     var configuration = hostContext.Configuration;
 
                     services
-                        .Configure<CachingTopLocationBasedObjectsOptions>(
+                        .Configure<TopLocationBasedObjectsOptions>(
                                 configuration
-                                    .GetSection(CachingTopLocationBasedObjectsOptions.CachingTopLocationBasedObjects))
-                        .Configure<CachingTopLocationAndFeatureBasedObjectsOptions>(
+                                    .GetSection(TopLocationBasedObjectsOptions.TopLocationBasedObjects))
+                        .Configure<TopLocationAndFeatureBasedObjectsOptions>(
                                 configuration
-                                    .GetSection(CachingTopLocationAndFeatureBasedObjectsOptions.CachingTopLocationAndFeatureBasedObjects))
-                        .AddHostedService<CachingTopLocationBasedObjectsWorker>()
-                        .AddHostedService<CachingTopLocationAndFeatureBasedObjectsWorker>();
+                                    .GetSection(TopLocationAndFeatureBasedObjectsOptions.TopLocationAndFeatureBasedObjects))
+                        .AddHostedService<TopLocationBasedObjectsWorker>()
+                        .AddHostedService<TopLocationAndFeatureBasedObjectsWorker>();
                 })
                 .UseNLog();
     }
