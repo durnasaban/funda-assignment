@@ -12,7 +12,7 @@ namespace TopAgentsApi.Controllers
     using Entities;
 
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/top-agents")]
     public class TopAgentsController : ControllerBase
     {
         private readonly ITopAgentsRepository _repository;

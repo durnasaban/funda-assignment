@@ -9,7 +9,7 @@ services:
     volumes:
       - mongo_data:/data/db
 
-   topagentsdb:
+  topagentsdb:
     container_name: topagentsdb
     restart: always
     ports:
@@ -20,7 +20,17 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "DatabaseSettings:ConnectionString=mongodb://fundadb:27017/FundaDb"
-      - CacheSettings:ConnectionString=basketdb:6379
+      - CacheSettings:ConnectionString=topagentsdb:6379
     depends_on:
       - fundadb
       - topagentsdb
+
+  topagentsapi:
+    container_name: topagentsapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development      
+      - CacheSettings:ConnectionString=topagentsdb:6379
+    depends_on:      
+      - topagentsdb
+    ports:
+      - "8000:80"

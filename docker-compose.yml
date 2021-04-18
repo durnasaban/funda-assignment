@@ -13,5 +13,11 @@ services:
       context: .
       dockerfile: src/CachingObjects/CachingObjectsWorkerService/Dockerfile
 
+  topagentsapi:
+    image: ${DOCKER_REGISTRY-}topagentsapi
+    build:
+      context: .
+      dockerfile: src/APIs/TopAgentsApi/Dockerfile
+
 volumes:
   mongo_data:

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Top Agents In Amsterdam</title>
+    <script src="index.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <table id="topAgentsInAmsterdam" class="table table-hover table-striped table-earning">
+                    <caption>Top Agents In Amsterdam (Objects)</caption>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Agent Name</th>
+                            <th>Object Count</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topAgentsInAmsterdamBody"></tbody>
+                </table>
+            </div>
+            <div class="col">
+                <table id="topAgentsInAmsterdamWithGarden" class="table table-hover table-striped table-earning">
+                    <caption>Top Agents In Amsterdam (Objects with Garden)</caption>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Agent Name</th>
+                            <th>Object With Garden Count</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topAgentsInAmsterdamWithGardenBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        loadTopAgentsInAmsterdam();
+        loadTopAgentsInAmsterdamWithGarden();
+    </script>
+</body>
+</html>

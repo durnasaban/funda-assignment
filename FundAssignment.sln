@@ -13,7 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CachingObjects.UnitTests", 
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4677B5D8-A89A-44B5-AD2A-CFFADE806689}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopAgentsApi", "src\APIs\TopAgentsApi\TopAgentsApi.csproj", "{BC456246-ED77-42B7-BD22-C6A0550A1320}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopAgentsApi", "src\APIs\TopAgentsApi\TopAgentsApi.csproj", "{BC456246-ED77-42B7-BD22-C6A0550A1320}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{76C959DB-48B1-4E3F-988A-38B2BD91C5D5}"
+	ProjectSection(SolutionItems) = preProject
+		src\UI\index.html = src\UI\index.html
+		src\UI\index.js = src\UI\index.js
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
