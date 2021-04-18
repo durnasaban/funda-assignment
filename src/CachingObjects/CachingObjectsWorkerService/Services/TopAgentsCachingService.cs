@@ -16,7 +16,8 @@ namespace CachingObjectsWorkerService.Services
     public class TopAgentsCachingService : ITopAgentsCachingService
     {
         private readonly IFundaApi _fundaApi;
-        private readonly IStagingObjectRepository _stagingObjectRepository;        
+        private readonly IStagingObjectRepository _stagingObjectRepository;
+        private readonly ITopAgentsRepository _topAgentsRepository;
         private readonly ILogger<TopAgentsCachingService> _logger;
         private readonly ICollection<TopAgentsCachingItem> _cachingItems;
         private readonly int _pageSize;
@@ -25,16 +26,18 @@ namespace CachingObjectsWorkerService.Services
             IFundaApi fundaApi,
             IOptions<TopAgentsCachingOptions> topLocationBasedObjectsOptions,
             ILogger<TopAgentsCachingService> logger,
-            IStagingObjectRepository stagingObjectRepository)
+            IStagingObjectRepository stagingObjectRepository,
+            ITopAgentsRepository topAgentsRepository)
         {
             _fundaApi = fundaApi ?? throw new ArgumentNullException(nameof(fundaApi));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _stagingObjectRepository = stagingObjectRepository ?? throw new ArgumentNullException(nameof(stagingObjectRepository));
+            _topAgentsRepository = topAgentsRepository ?? throw new ArgumentNullException(nameof(topAgentsRepository));
 
             var options = topLocationBasedObjectsOptions ?? throw new ArgumentNullException(nameof(topLocationBasedObjectsOptions));
 
             _cachingItems = options.Value.CachingItems;
-            _pageSize = options.Value.PageSize;            
+            _pageSize = options.Value.PageSize;
         }
 
         public async Task ProsessCachingObjectsAsync()
@@ -51,6 +54,8 @@ namespace CachingObjectsWorkerService.Services
                 await GetAndSaveObjectsAsync(cachingItem);
 
                 var topAgents = await _stagingObjectRepository.GetTopAgentsByObjects(cachingItem.TopAgentCount);
+
+                await _topAgentsRepository.UpdateTopAgents(cachingItem.Key, topAgents);
             }
         }
 

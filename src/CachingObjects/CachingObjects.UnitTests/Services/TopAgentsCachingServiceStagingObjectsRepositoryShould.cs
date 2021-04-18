@@ -1,39 +1,23 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentAssertions;
 using Moq;
-using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace CachingObjects.UnitTests.Services
 {
     using CachingObjectsWorkerService.Entities;
-    using CachingObjectsWorkerService.ExternalServices;
-    using CachingObjectsWorkerService.Repositories;
     using CachingObjectsWorkerService.Services;
-    using FluentAssertions;
-    using System;
-    using System.Collections.Generic;
 
-    public class TopAgentsCachingServiceRepositoryShould : TopAgentsCachingServiceTestBase
+    public class TopAgentsCachingServiceStagingObjectsRepositoryShould : TopAgentsCachingServiceTestBase
     {
         private readonly TopAgentsCachingService _testing;
 
-        private readonly Mock<IFundaApi> _fundaApiMock;
-        private readonly Mock<ILogger<TopAgentsCachingService>> _loggerMock;
-        private readonly Mock<IStagingObjectRepository> _repositoryMock;
-
-        public TopAgentsCachingServiceRepositoryShould()
+        public TopAgentsCachingServiceStagingObjectsRepositoryShould()
         {
-            _fundaApiMock = new Mock<IFundaApi>();
-            _loggerMock = new Mock<ILogger<TopAgentsCachingService>>();
-            _repositoryMock = new Mock<IStagingObjectRepository>();
-
-            _testing = new TopAgentsCachingService(
-                _fundaApiMock.Object,
-                GetDefaultTopAgentsCachingOptions(),
-                _loggerMock.Object,
-                _repositoryMock.Object);
+            _testing = GetServiceInstance(GetDefaultTopAgentsCachingOptions());
         }
 
         [Fact]
@@ -47,10 +31,10 @@ namespace CachingObjects.UnitTests.Services
             await _testing.ProsessCachingObjectsAsync();
 
             // assert
-            _fundaApiMock
+            FundaApiMock
                 .Verify(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
 
-            _repositoryMock
+            StagingObjectRepositoryMock
                 .Verify(repo => repo.DeleteAllStagingObjects(), Times.Once);
         }
 
@@ -76,17 +60,17 @@ namespace CachingObjects.UnitTests.Services
             var agentId = 1;
             var agentName = "agent";
 
-            SetupFundaApiGetObjects(id, agentId, agentName);
+            SetupFundaApiGetObjects(id: id, agentId: agentId, agentName: agentName);
             SetupRepositoryDeleteAllStatingObject(true);
 
             // act
             await _testing.ProsessCachingObjectsAsync();
 
             // assert
-            _fundaApiMock
+            FundaApiMock
                 .Verify(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
 
-            _repositoryMock
+            StagingObjectRepositoryMock
                 .Verify(repo => repo.CreateStagingObjects(
                     It.Is<ICollection<StagingObject>>(so =>
                         so.FirstOrDefault().Id == id &&
@@ -107,22 +91,8 @@ namespace CachingObjects.UnitTests.Services
             await _testing.ProsessCachingObjectsAsync();
 
             // assert
-            _repositoryMock
+            StagingObjectRepositoryMock
                 .Verify(repo => repo.GetTopAgentsByObjects(It.IsAny<int>()), Times.Once);
-        }
-
-
-        private void SetupRepositoryDeleteAllStatingObject(bool result) =>
-            _repositoryMock
-                .Setup(repo => repo.DeleteAllStagingObjects())
-                .ReturnsAsync(result);
-
-        private void SetupFundaApiGetObjects(string id = "id", int agentId = 1, string agentName = "agent")
-        {
-            var response = JObject.Parse(@"{'Paging': { 'AantalPaginas' : '1' }, 'Objects':[{'Id':'" + id + "', 'MakelaarId': " + agentId + ", 'MakelaarNaam': '" + agentName + "'}]}");
-            _fundaApiMock
-                .Setup(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), 1))
-                .ReturnsAsync(response);
         }
     }
 }
