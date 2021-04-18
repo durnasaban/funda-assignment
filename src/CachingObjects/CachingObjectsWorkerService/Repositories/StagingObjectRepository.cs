@@ -72,8 +72,6 @@ namespace CachingObjectsWorkerService.Repositories
                                 .AppendStage<BsonDocument>(limit)
                             .ToListAsync();
 
-            //result.FirstOrDefault().GetValue("_id").AsBsonDocument.GetValue("AgentId").
-
             return result.Select(r =>
                             new TopAgentDetail
                             {
