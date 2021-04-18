@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +8,9 @@ using Microsoft.OpenApi.Models;
 
 namespace TopAgentsApi
 {
+    using Microsoft.AspNetCore.Http;
     using Repositories;
+    using StackExchange.Redis;
 
     public class Startup
     {
@@ -24,6 +27,12 @@ namespace TopAgentsApi
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
+                //options.ConfigurationOptions = new ConfigurationOptions
+                //{
+                //    //silently retry in the background if the Redis connection is temporarily down
+                //    AbortOnConnectFail = false
+                //};
+                //options.InstanceName = "AspNetRateLimit";
             });
 
             services
@@ -34,6 +43,14 @@ namespace TopAgentsApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TopAgentsApi", Version = "v1" });
             });
+
+            services.Configure<ClientRateLimitOptions>(Configuration.GetSection("ClientRateLimiting"));
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
+            services.AddSingleton<IClientPolicyStore, DistributedCacheClientPolicyStore>();
+            services.AddSingleton<IRateLimitCounterStore, DistributedCacheRateLimitCounterStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +64,8 @@ namespace TopAgentsApi
             }
 
             app.UseRouting();
+
+            app.UseClientRateLimiting();
 
             app.UseAuthorization();
 
