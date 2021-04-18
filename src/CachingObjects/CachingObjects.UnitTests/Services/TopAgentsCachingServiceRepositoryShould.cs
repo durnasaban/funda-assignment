@@ -96,6 +96,22 @@ namespace CachingObjects.UnitTests.Services
                     Times.Once);
         }
 
+        [Fact]
+        public async Task ShouldGetTopAgentCount()
+        {
+            // arrange
+            SetupFundaApiGetObjects();
+            SetupRepositoryDeleteAllStatingObject(true);
+
+            // act
+            await _testing.ProsessCachingObjectsAsync();
+
+            // assert
+            _repositoryMock
+                .Verify(repo => repo.GetTopAgentsByObjects(It.IsAny<int>()), Times.Once);
+        }
+
+
         private void SetupRepositoryDeleteAllStatingObject(bool result) =>
             _repositoryMock
                 .Setup(repo => repo.DeleteAllStagingObjects())

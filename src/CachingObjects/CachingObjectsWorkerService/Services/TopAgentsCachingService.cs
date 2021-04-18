@@ -16,10 +16,10 @@ namespace CachingObjectsWorkerService.Services
     public class TopAgentsCachingService : ITopAgentsCachingService
     {
         private readonly IFundaApi _fundaApi;
-        private readonly ICollection<TopAgentsCachingItem> _cachingItems;
-        private readonly IStagingObjectRepository _stagingObjectRepository;
-        private readonly int _pageSize;
+        private readonly IStagingObjectRepository _stagingObjectRepository;        
         private readonly ILogger<TopAgentsCachingService> _logger;
+        private readonly ICollection<TopAgentsCachingItem> _cachingItems;
+        private readonly int _pageSize;
 
         public TopAgentsCachingService(
             IFundaApi fundaApi,
@@ -34,7 +34,7 @@ namespace CachingObjectsWorkerService.Services
             var options = topLocationBasedObjectsOptions ?? throw new ArgumentNullException(nameof(topLocationBasedObjectsOptions));
 
             _cachingItems = options.Value.CachingItems;
-            _pageSize = options.Value.PageSize;
+            _pageSize = options.Value.PageSize;            
         }
 
         public async Task ProsessCachingObjectsAsync()
@@ -49,6 +49,8 @@ namespace CachingObjectsWorkerService.Services
                 }
 
                 await GetAndSaveObjectsAsync(cachingItem);
+
+                var topAgents = await _stagingObjectRepository.GetTopAgentsByObjects(cachingItem.TopAgentCount);
             }
         }
 
