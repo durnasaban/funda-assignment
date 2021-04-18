@@ -4,6 +4,9 @@ services:
   fundadb:
     image: mongo
 
+  topagentsdb:
+    image: redis:alpine
+
   cachingobjectsworkerservice:
     image: ${DOCKER_REGISTRY-}cachingobjectsworkerservice
     build:
