@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  fundadb:
+    image: mongo
+
+  cachingobjectsworkerservice:
+    image: ${DOCKER_REGISTRY-}cachingobjectsworkerservice
+    build:
+      context: .
+      dockerfile: src/CachingObjects/CachingObjectsWorkerService/Dockerfile
+
+volumes:
+  mongo_data:

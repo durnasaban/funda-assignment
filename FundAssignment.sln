@@ -9,7 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CachingObjects", "CachingOb
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CachingObjectsWorkerService", "src\CachingObjects\CachingObjectsWorkerService\CachingObjectsWorkerService.csproj", "{39893DD0-275F-4C2A-A87C-06C63CEECD62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CachingObjects.UnitTests", "src\CachingObjects\CachingObjects.UnitTests\CachingObjects.UnitTests.csproj", "{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CachingObjects.UnitTests", "src\CachingObjects\CachingObjects.UnitTests\CachingObjects.UnitTests.csproj", "{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4677B5D8-A89A-44B5-AD2A-CFFADE806689}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC3491F4-57C4-403B-B6BC-84E3CFB527FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4677B5D8-A89A-44B5-AD2A-CFFADE806689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4677B5D8-A89A-44B5-AD2A-CFFADE806689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4677B5D8-A89A-44B5-AD2A-CFFADE806689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4677B5D8-A89A-44B5-AD2A-CFFADE806689}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

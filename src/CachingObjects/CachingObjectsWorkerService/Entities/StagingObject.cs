@@ -6,7 +6,7 @@ namespace CachingObjectsWorkerService.Entities
     public class StagingObject
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+        // [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
         public string ObjectId { get; set; }

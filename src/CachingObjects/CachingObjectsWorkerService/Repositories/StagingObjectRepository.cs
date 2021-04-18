@@ -28,7 +28,7 @@ namespace CachingObjectsWorkerService.Repositories
                                         .StagingObjects
                                         .DeleteManyAsync(filter);
 
-            return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
+            return deleteResult.IsAcknowledged;
         }
 
         public async Task CreateStagingObjects(ICollection<StagingObject> stagingObjects) =>
@@ -49,7 +49,7 @@ namespace CachingObjectsWorkerService.Repositories
                                 {nameof(StagingObject.AgentName), $"${nameof(StagingObject.AgentName)}"}, }
                         },
                         { nameof(TopAgentDetail.ObjectCount),
-                            new BsonDocument ("$count", $"${nameof(StagingObject.ObjectId)}")
+                            new BsonDocument ("$sum", 1)
                         },
                     }
                 }
@@ -72,11 +72,13 @@ namespace CachingObjectsWorkerService.Repositories
                                 .AppendStage<BsonDocument>(limit)
                             .ToListAsync();
 
+            //result.FirstOrDefault().GetValue("_id").AsBsonDocument.GetValue("AgentId").
+
             return result.Select(r =>
                             new TopAgentDetail
                             {
-                                AgentName = r.GetValue(1).ToString(),
-                                ObjectCount = (int)r.GetValue(2)
+                                AgentName = r.GetValue("_id").AsBsonDocument.GetValue("AgentName").AsString,
+                                ObjectCount = r.GetValue("ObjectCount").AsInt32
                             });
         }
     }

@@ -1,0 +1,17 @@
+version: '3.4'
+services:
+  fundadb:
+    container_name: fundadb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  cachingobjectsworkerservice:
+    container_name: cachingobjectsworkerservice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "MongoDbSettings:ConnectionString=mongodb://fundadb:27017"
+    depends_on:
+      - fundadb
