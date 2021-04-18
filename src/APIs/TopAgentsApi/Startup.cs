@@ -1,6 +1,7 @@
 using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,9 +9,8 @@ using Microsoft.OpenApi.Models;
 
 namespace TopAgentsApi
 {
-    using Microsoft.AspNetCore.Http;
+    using Middleware;
     using Repositories;
-    using StackExchange.Redis;
 
     public class Startup
     {
@@ -27,12 +27,6 @@ namespace TopAgentsApi
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
-                //options.ConfigurationOptions = new ConfigurationOptions
-                //{
-                //    //silently retry in the background if the Redis connection is temporarily down
-                //    AbortOnConnectFail = false
-                //};
-                //options.InstanceName = "AspNetRateLimit";
             });
 
             services
@@ -62,6 +56,7 @@ namespace TopAgentsApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TopAgentsApi v1"));
             }
+            app.UseApiExceptionHandler();
 
             app.UseRouting();
 
