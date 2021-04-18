@@ -137,7 +137,7 @@ namespace CachingObjects.UnitTests.Services
 
         private void SetupFundaApiGetLocationBasedObjects()
         {
-            var response = JObject.Parse(@"{'Paging': { 'AantalPaginas' : 1 }}");
+            var response = JObject.Parse(@"{'Paging': { 'AantalPaginas' : 1 }, 'Objects': [{'Id':'id', 'MakelaarId': 1, 'MakelaarNaam': 'agentName'}]}");
 
             _fundaApiMock
                 .Setup(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))

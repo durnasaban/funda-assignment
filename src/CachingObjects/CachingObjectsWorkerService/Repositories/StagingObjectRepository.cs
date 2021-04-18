@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CachingObjectsWorkerService.Repositories
 {
-    using CachingObjectsWorkerService.Data;
+    using Data;
     using Entities;
-    using MongoDB.Driver;
-    using System;
 
     public class StagingObjectRepository : IStagingObjectRepository
     {
@@ -28,9 +28,9 @@ namespace CachingObjectsWorkerService.Repositories
             return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
         }
 
-        public Task CreateStagingObjects(ICollection<StagingObject> stagingObjects)
-        {
-            throw new System.NotImplementedException();
-        }
+        public async Task CreateStagingObjects(ICollection<StagingObject> stagingObjects) =>
+            await _context
+                     .StagingObjects
+                     .InsertManyAsync(stagingObjects);
     }
 }

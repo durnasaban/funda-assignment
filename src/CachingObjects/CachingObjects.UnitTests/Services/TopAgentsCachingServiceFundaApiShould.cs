@@ -72,7 +72,7 @@ namespace CachingObjects.UnitTests.Services
         {
             // arrange
             var pageSize = 1;
-            var response = JObject.Parse(@"{'Paging': { 'AantalPaginas' : " + totalPage + " }}");
+            var response = JObject.Parse(GetFundaApiResponse(totalPage));
 
             var options = GetDefaultTopAgentsCachingOptions(pageSize);
             var testing = GetServiceInstance(options);
@@ -80,7 +80,6 @@ namespace CachingObjects.UnitTests.Services
             _fundaApiMock
                 .Setup(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), pageSize))
                 .ReturnsAsync(response);
-
 
             // act
             await testing.ProsessCachingObjectsAsync();
@@ -108,5 +107,8 @@ namespace CachingObjects.UnitTests.Services
           _repositoryMock
               .Setup(repo => repo.DeleteAllStagingObjects())
               .ReturnsAsync(true);
+
+        private static string GetFundaApiResponse(int totalPage) =>
+            @"{'Paging': { 'AantalPaginas' : " + totalPage + " }, 'Objects': [{'Id':'id', 'MakelaarId': 1, 'MakelaarNaam': 'agentName'}]}";
     }
 }

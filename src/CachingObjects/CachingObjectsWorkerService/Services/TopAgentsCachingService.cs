@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CachingObjectsWorkerService.Services
 {
+    using CachingObjectsWorkerService.Entities;
     using ExternalServices;
     using Models;
     using Options;
@@ -23,7 +24,7 @@ namespace CachingObjectsWorkerService.Services
         public TopAgentsCachingService(
             IFundaApi fundaApi,
             IOptions<TopAgentsCachingOptions> topLocationBasedObjectsOptions,
-            ILogger<TopAgentsCachingService> logger, 
+            ILogger<TopAgentsCachingService> logger,
             IStagingObjectRepository stagingObjectRepository)
         {
             _fundaApi = fundaApi ?? throw new ArgumentNullException(nameof(fundaApi));
@@ -33,7 +34,7 @@ namespace CachingObjectsWorkerService.Services
             var options = topLocationBasedObjectsOptions ?? throw new ArgumentNullException(nameof(topLocationBasedObjectsOptions));
 
             _cachingItems = options.Value.CachingItems;
-            _pageSize = options.Value.PageSize;            
+            _pageSize = options.Value.PageSize;
         }
 
         public async Task ProsessCachingObjectsAsync()
@@ -60,10 +61,7 @@ namespace CachingObjectsWorkerService.Services
             {
                 var response = await GetObjectsFromApi(cachingItem.SearchQuery, currentPage);
 
-                // implement mongo
-                // Send responses to the mongo
-                // implement redis
-                // Cache redis reports to redis
+                await _stagingObjectRepository.CreateStagingObjects(GetStagingObjects(response));
 
                 if (maxPage == 1)
                 {
@@ -99,6 +97,23 @@ namespace CachingObjectsWorkerService.Services
             }
 
             return response;
+        }
+
+        private static List<StagingObject> GetStagingObjects(dynamic response)
+        {
+            var stagingObjects = new List<StagingObject>();
+
+            foreach (var items in response.Objects)
+            {
+                stagingObjects.Add(new StagingObject
+                {
+                    Id = items.Id,
+                    AgentId = items.MakelaarId,
+                    AgentName = items.MakelaarNaam
+                });
+            }
+
+            return stagingObjects;
         }
     }
 }
