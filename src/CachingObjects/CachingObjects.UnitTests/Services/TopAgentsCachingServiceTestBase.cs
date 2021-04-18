@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
+using Moq;
 
 namespace CachingObjects.UnitTests.Services
 {
     using CachingObjectsWorkerService.Models;
-    using CachingObjectsWorkerService.Options;
+    using CachingObjectsWorkerService.Options;    
 
     public class TopAgentsCachingServiceTestBase
     {
@@ -34,6 +35,5 @@ namespace CachingObjects.UnitTests.Services
 
             return GetTopAgentsCachingOptions(pageSize, cachingItems);
         }
-
     }
 }

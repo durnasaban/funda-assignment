@@ -10,37 +10,48 @@ namespace CachingObjectsWorkerService.Services
     using ExternalServices;
     using Models;
     using Options;
+    using Repositories;
 
     public class TopAgentsCachingService : ITopAgentsCachingService
     {
         private readonly IFundaApi _fundaApi;
         private readonly ICollection<TopAgentsCachingItem> _cachingItems;
+        private readonly IStagingObjectRepository _stagingObjectRepository;
         private readonly int _pageSize;
         private readonly ILogger<TopAgentsCachingService> _logger;
 
         public TopAgentsCachingService(
             IFundaApi fundaApi,
             IOptions<TopAgentsCachingOptions> topLocationBasedObjectsOptions,
-            ILogger<TopAgentsCachingService> logger)
+            ILogger<TopAgentsCachingService> logger, 
+            IStagingObjectRepository stagingObjectRepository)
         {
             _fundaApi = fundaApi ?? throw new ArgumentNullException(nameof(fundaApi));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _stagingObjectRepository = stagingObjectRepository ?? throw new ArgumentNullException(nameof(stagingObjectRepository));
 
             var options = topLocationBasedObjectsOptions ?? throw new ArgumentNullException(nameof(topLocationBasedObjectsOptions));
 
             _cachingItems = options.Value.CachingItems;
-            _pageSize = options.Value.PageSize;
+            _pageSize = options.Value.PageSize;            
         }
 
         public async Task ProsessCachingObjectsAsync()
         {
             foreach (var cachingItem in _cachingItems)
             {
-                await ProcessCachingObjectsByLocationAsync(cachingItem);
+                var deleteResult = await _stagingObjectRepository.DeleteAllStagingObjects();
+
+                if (!deleteResult)
+                {
+                    throw new Exception("Staging Object Table couldn't be cleaned up!");
+                }
+
+                await GetAndSaveObjectsAsync(cachingItem);
             }
         }
 
-        private async Task ProcessCachingObjectsByLocationAsync(TopAgentsCachingItem cachingItem)
+        private async Task GetAndSaveObjectsAsync(TopAgentsCachingItem cachingItem)
         {
             var currentPage = 1;
             var maxPage = 1;

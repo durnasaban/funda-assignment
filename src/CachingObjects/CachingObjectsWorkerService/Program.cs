@@ -49,6 +49,7 @@ namespace CachingObjectsWorkerService
                         .AddOptionsConfig(configuration)
                         .AddHostedServices()
                         .AddRefitConfig(configuration)
+                        .AddMongoDb()
                         .AddServices();
                 })
                 .UseNLog();

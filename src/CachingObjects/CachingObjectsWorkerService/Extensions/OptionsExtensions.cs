@@ -10,7 +10,9 @@ namespace CachingObjectsWorkerService.Extensions
         public static IServiceCollection AddOptionsConfig(this IServiceCollection services, IConfiguration configuration) =>
             services
                 .Configure<TopAgentsCachingOptions>(
-                    configuration.GetSection(TopAgentsCachingOptions.TopAgentsCaching));
+                    configuration.GetSection(TopAgentsCachingOptions.TopAgentsCaching))
+                .Configure<MongoDbSettingsOptions>(
+                    configuration.GetSection(MongoDbSettingsOptions.MongoDbSettings));
 
 
     }

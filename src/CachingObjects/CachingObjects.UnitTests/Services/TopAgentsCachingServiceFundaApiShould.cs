@@ -11,17 +11,22 @@ namespace CachingObjects.UnitTests.Services
 {
     using CachingObjectsWorkerService.ExternalServices;
     using CachingObjectsWorkerService.Options;
+    using CachingObjectsWorkerService.Repositories;
     using CachingObjectsWorkerService.Services;
 
     public class TopAgentsCachingServiceFundaApiShould : TopAgentsCachingServiceTestBase
     {
         private readonly Mock<IFundaApi> _fundaApiMock;
         private readonly Mock<ILogger<TopAgentsCachingService>> _loggerMock;
+        private readonly Mock<IStagingObjectRepository> _repositoryMock;
 
-        public TopAgentsCachingServiceFundaApiShould()
+        public TopAgentsCachingServiceFundaApiShould()            
         {
             _fundaApiMock = new Mock<IFundaApi>();
             _loggerMock = new Mock<ILogger<TopAgentsCachingService>>();
+            _repositoryMock = new Mock<IStagingObjectRepository>();
+
+            SetupRepositoryDeleteAllStatingObject();
         }
 
         [Fact]
@@ -85,7 +90,23 @@ namespace CachingObjects.UnitTests.Services
                 .Verify(api => api.GetObjects(It.IsAny<string>(), It.IsAny<int>(), pageSize), Times.Exactly(totalPage));
         }
 
-        private TopAgentsCachingService GetServiceInstance(IOptions<TopAgentsCachingOptions> options) =>
-           new TopAgentsCachingService(_fundaApiMock.Object, options, _loggerMock.Object);
+        private TopAgentsCachingService GetServiceInstance(IOptions<TopAgentsCachingOptions> options = null)
+        {
+            if (options == null)
+            {
+                options = GetDefaultTopAgentsCachingOptions();
+            }
+
+            return new TopAgentsCachingService(
+                _fundaApiMock.Object,
+                options,
+                _loggerMock.Object,
+                _repositoryMock.Object);
+        }
+
+        private void SetupRepositoryDeleteAllStatingObject() =>
+          _repositoryMock
+              .Setup(repo => repo.DeleteAllStagingObjects())
+              .ReturnsAsync(true);
     }
 }
