@@ -10,7 +10,18 @@ function loadTopAgentsInAmsterdamWithGarden() {
 
 function loadTopAgents(key, bodyId) {
     fetch(`${topAgentsUrl}/${key}`)
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+
+                alert(res.statusText);
+
+                console.log(res);
+
+                throw new Error(`Http status ${res.status}`);
+            }
+
+            return res.json();
+        })
         .then(ta => loadTopAgentsToTable(bodyId, ta));
 }
 
